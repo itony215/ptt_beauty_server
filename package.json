@@ -1,0 +1,31 @@
+{
+  "name": "node-swagger-template",
+  "version": "0.0.1",
+  "private": true,
+  "description": "New Swagger API Project",
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.12.3",
+    "swagger-express-mw": "^0.1.0",
+    "moment": "^2.18.1",
+    "tedious": "^2.0.0",
+    "tedious-connection-pool": "^1.0.5",
+    "guid": "0.0.12"
+  },
+  "devDependencies": {
+    "should": "^7.1.0",
+    "supertest": "^1.0.0",
+    "mocha": "*"
+  },
+  "engines": {
+    "node": ">=7.6.0"
+  },
+  "scripts": {
+    "start": "swagger project start",
+    "edit": "swagger project edit",
+    "test": "swagger project test"
+  }
+}
