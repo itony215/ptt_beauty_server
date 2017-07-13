@@ -21,8 +21,14 @@ function responseToErr(res, error) {
   });
 }
 
+/**
+ * option: 
+ */
 function executeRequest(url, options) {
-  options.json = options.json || true;
+
+
+  options.json = typeof (options.json) !== undefined ? options.json : true;
+  console.info('options', options);
   return new Promise(function (resolve, reject) {
 
     let body = options.form;
@@ -44,12 +50,12 @@ function executeRequest(url, options) {
       headers: options.headers,
       body: options.method === 'GET' ? null : body,
     }).then((response) => {
-      return options.json ? response.json() : response.text();
+      return options.json === true ? response.json() : response.text();
     }, (err) => {
       console.warn('err', err);
       reject(err);
-    }).then(jsonResponse => {
-      resolve(jsonResponse);
+    }).then(response => {
+      resolve(response);
     });
     /*request.post({ 
       url, 

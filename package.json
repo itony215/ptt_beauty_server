@@ -8,12 +8,16 @@
   "license": "",
   "main": "app.js",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "es6-promise": "^4.1.1",
     "express": "^4.12.3",
-    "swagger-express-mw": "^0.1.0",
+    "guid": "0.0.12",
+    "isomorphic-fetch": "^2.2.1",
     "moment": "^2.18.1",
+    "shortid": "^2.2.8",
+    "swagger-express-mw": "^0.1.0",
     "tedious": "^2.0.0",
-    "tedious-connection-pool": "^1.0.5",
-    "guid": "0.0.12"
+    "tedious-connection-pool": "^1.0.5"
   },
   "devDependencies": {
     "should": "^7.1.0",
