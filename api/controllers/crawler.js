@@ -5,19 +5,38 @@ const PTT_HOST = `https://www.ptt.cc/`;
 
 const PTT_BEAUTY_HOST = `${PTT_HOST}/bbs/beauty/index.html`;
 
-function parseIndex($) {
-  const result = $('.r-ent').map((i, block) => {
+const ID_REGEX = /[^\/].+[^.html$]/;
+function parseNavigationLink($) {
+  const pages = [];
+  $('.btn-group-paging > a').map((i, item) => {
+    const pageItemElement = $(item);
+    pages[i] = pageItemElement.attr('href');
+  });
+  return pages;
+}
+function parseArticles($) {
+  const result = $('.r-ent').filter((i, block)=>{
     const blockElement = $(block);
     const hrefElement = blockElement.find('.title > a');
+    const articleLink = hrefElement.attr('href');
+    return blockElement.prevAll('.r-list-sep').length === 0 && articleLink;
+    }).map((i, block) => {
+    const blockElement = $(block);
+
+    const hrefElement = blockElement.find('.title > a');
     const meta = blockElement.find('.meta');
+    const articleLink = hrefElement.attr('href');
+    //console.warn('articleLink', articleLink);
+
+    const id = articleLink ? articleLink.match(ID_REGEX)[0] : shortid.generate();
     return {
-      articleLink: hrefElement.attr('href'),
+      articleLink,
       text: hrefElement.text(),
       meta: {
         date: meta.find('.date').text(),
         author: meta.find('.author').text(),
       },
-      id: shortid.generate(),
+      id,
     }
   });
   return result;
@@ -30,29 +49,32 @@ function fetchFirstPicture(parsedResult, options) {
       method: 'GET',
       json: false,
     }).then(result => {
-      console.warn('fetchFirstPicture', item.articleLink, result);
+      //console.warn('fetchFirstPicture', item.articleLink, result);
       const $ = cheerio.load(result);
       const href = $('#main-content > a').attr('href');
-      return {
+      return Object.assign({}, {
         previewHref: href,
         id: item.id,
-      }
+      }, item);
     });
     tasks.push(task);
   });
   return Promise.all(tasks);
 }
 function crawl(req, res, next) {
-  const crawlTarget = req.body;
-
-  executeRequest(PTT_BEAUTY_HOST, {
+  const { url } = req.query;
+  console.warn('crawl url', !!url);
+  const crawlTarget = !url ? PTT_BEAUTY_HOST : `${PTT_HOST}${url}`;
+  executeRequest(crawlTarget, {
     method: 'GET',
     json: false,
   }).then((result) => {
     const $ = cheerio.load(result);
 
     //console.warn('href', hrefs.get());
-    const parsedResult = parseIndex($);
+    const navResult = parseNavigationLink($);
+    console.warn('navResult', navResult);
+    const parsedResult = parseArticles($);
     /**
      * [
       * { articleLink: '/bbs/Beauty/M.1430099938.A.3B7.html',
@@ -64,6 +86,11 @@ function crawl(req, res, next) {
     const fetchFirstPictureResult = fetchFirstPicture(parsedResult.get())
 
     fetchFirstPictureResult.then((results) => {
+      res.links({
+        prev: navResult[1],
+        next: navResult[2],
+        last: navResult[3]
+      })
       res.json(results);
     });
    

@@ -23,6 +23,23 @@ consumes:
 produces:
   - application/json
 paths:
+  /common/crawl/:
+    x-swagger-router-controller: crawler
+    get:
+      tags:
+        - Common
+      description: Crawl PTT beauty Board
+      operationId: crawl
+      parameters:
+        - name: url
+          in: query
+          type: string
+          required: false
+      responses:
+        "200":
+          description: Get PTT beauty Board success
+          schema:
+            $ref: "#/definitions/GetBeautyListResponse"
   /common/countries/{id}:
     x-swagger-router-controller: common
     get:
@@ -89,6 +106,18 @@ paths:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
+  GetBeautyListResponse:
+    type: array
+    items:
+      $ref: '#/definitions/GetBeautyResponse'
+  GetBeautyResponse:
+    properties:
+      text:
+        type: string
+      id:
+        type: string
+      
+
   GetCountryResponse:
     properties:
       name:

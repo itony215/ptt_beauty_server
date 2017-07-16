@@ -1,15 +1,21 @@
 'use strict';
-
-global.base_dir = __dirname;
-global.abs_path = function (path) {
-  return base_dir + path;
-}
-global.include = function (file) {
-  return require(abs_path('/' + file));
-}
-
 var SwaggerExpress = require('swagger-express-mw');
 var app = require('express')();
+var cors = require('cors');
+
+
+
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions = {
+    allowedHeaders: ['Content-Type', 'Authorization', 'Link'],
+    exposedHeaders: ['Link'],
+    origin: "*",
+    methods: ['GET', 'POST'],
+  }
+  callback(null, corsOptions) // callback expects two parameters: error and options
+}
+app.use(cors(corsOptionsDelegate));
+
 module.exports = app; // for testing
 
 const TOKEN = 'Ss-^3EnbsM`Mbp(#ou2})&wXYn|Pu';
