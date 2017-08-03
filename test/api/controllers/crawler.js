@@ -11,6 +11,9 @@ describe('Test', () => {
         console.warn('json result', result);
         done(!result);
       },
+      links: (result) => {
+        done(!result);
+      },
     };
 
     const mockNext = (err) => {

@@ -19,6 +19,7 @@ function parseArticles($) {
     const blockElement = $(block);
     const hrefElement = blockElement.find('.title > a');
     const articleLink = hrefElement.attr('href');
+   
     return blockElement.prevAll('.r-list-sep').length === 0 && articleLink;
     }).map((i, block) => {
     const blockElement = $(block);
@@ -27,11 +28,12 @@ function parseArticles($) {
     const meta = blockElement.find('.meta');
     const articleLink = hrefElement.attr('href');
     //console.warn('articleLink', articleLink);
-
+    const popular = blockElement.find('.nrec > .hl').text();
     const id = articleLink ? articleLink.match(ID_REGEX)[0] : shortid.generate();
     return {
       articleLink,
       text: hrefElement.text(),
+      popular,
       meta: {
         date: meta.find('.date').text(),
         author: meta.find('.author').text(),
