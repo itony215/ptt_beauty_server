@@ -3,7 +3,7 @@ var SwaggerExpress = require('swagger-express-mw');
 var app = require('express')();
 var cors = require('cors');
 
-
+require('./db');
 
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions = {

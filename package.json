@@ -15,6 +15,7 @@
     "guid": "0.0.12",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.18.1",
+    "mongoose": "^4.11.5",
     "shortid": "^2.2.8",
     "swagger-express-mw": "^0.1.0",
     "tedious": "^2.0.0",
@@ -31,6 +32,6 @@
   "scripts": {
     "start": "swagger project start",
     "edit": "swagger project edit",
-    "test": "swagger project test"
+    "test": "node_modules/mocha/bin/mocha"
   }
 }
